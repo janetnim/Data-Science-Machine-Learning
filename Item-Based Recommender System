@@ -1,0 +1,38 @@
+import pandas as pd
+
+#create rating column with the following fields
+r_cols = ['user_id', 'movie_id', 'rating']
+ratings = pd.read_csv('/Users/janetwairimu/Desktop/ML/oculus/DataScience-Python3/ml-100k/u.data', sep='\t', names=r_cols, usecols=range(3), encoding='latin-1')
+
+#create movies columns with the following fields
+m_cols = ['movie_id', 'title']
+movies = pd.read_csv('/Users/janetwairimu/Desktop/ML/oculus/DataScience-Python3/ml-100k/u.item', sep='|', names=m_cols, usecols=range(2), encoding='latin-1')
+
+ratings = pd.merge(movies, ratings)
+ratings.head()
+
+
+#create a new df from the ratings df we had using pivot_head with the userId, title of movie and ratings per user for that movie
+movieRatings = ratings.pivot_table(index=['user_id'], columns=['title'], values='rating')
+movieRatings.head()
+
+corrMatrix = movieRatings.corr(method='pearson', min_periods=1)
+corrMatrix.head()
+
+#NaN shows that a user did not rate that movie
+
+similarMovies = corrMatrix.corrwith('Star Wars (1997)')
+similarMovies.head()
+
+myRatings = movieRatings.loc[0].dropna()
+myRatings.head()
+
+simCandidates = pd.Series()
+for i in range(0, len(myRatings.index)):
+    print('Adding similar'+myRatings.index[i]+'....')
+    sims = corrMatrix[myRatings.index[i]].dropna()
+    sims = sims.map(lambda x: x*myRatings[i])
+    simCandidates = simCandidates.append(sims)
+print("Sorting...")
+simCandidates.sort_values(inplace=True, ascending=False)
+simCandidates.head(10)
