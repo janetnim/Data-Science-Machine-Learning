@@ -1,0 +1,31 @@
+# Let us find out the relationship between income and age then plot a graph for visulaization
+
+import random
+import numpy as np
+
+def create_cluster(N, k):
+    random.seed(10)
+    pointspercentroid = float(N/k)
+    x= []
+    for i in range(k):
+        income_centroid = random.uniform(20000.0, 200000.0)
+        age_centroid = random.uniform(20.0, 70.0)
+        for j in range(int(pointspercentroid)):
+            x.append([np.random.normal(income_centroid, 10000), np.random.normal(age_centroid, 2.0)])
+    x = np.array(x)
+    return x
+
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import scale
+
+data = create_cluster(100, 5)
+
+model = KMeans(n_clusters=7)
+model = model.fit(scale(data))
+
+# print (model.labels_)
+
+plt.figure(figsize=(8,6))
+plt.scatter(data[:,0], data[:,1], c=model.labels_.astype(np.float))
+
