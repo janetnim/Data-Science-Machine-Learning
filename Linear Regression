@@ -1,0 +1,29 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+dataset = pd.read_csv('/Users/janetwairimu/Downloads/lifeexpectancy_usa.csv')
+print(dataset.shape)
+
+dataset.describe()
+dataset.head()
+
+x = dataset['TIME'].values
+y = dataset['Value'].values
+mean_x = np.mean(x)
+mean_y = np.mean(y)
+print(mean_x, mean_y)
+
+m = len(x)
+numer = 0
+denom = 0
+for i in range(m):
+    numer += (x[i]-mean_x)*(y[i]-mean_y)
+    denom += (x[i]-mean_x)**2
+    b1 = numer/denom
+    b0 = mean_y - (b1*mean_x)
+print(b1, b0)
+
+plt.scatter(x,y)
+
+# Run each paragraph on jupyter notebooks to see results until the plotted graph
