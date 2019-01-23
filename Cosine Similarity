@@ -1,0 +1,9 @@
+# Lets find the similarities between two arrays by getting the distance between them
+
+from scipy import spatial
+
+a=([0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+b=([0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])
+print(spatial.distance.cosine(a, b))
+
+# the distance is less thus showing more similariry between the two arrays
